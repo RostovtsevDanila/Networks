@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>HomePage.qml</file>
+        <file>MessageZone.qml</file>
+        <file>ChatZone.qml</file>
+        <file>SendButton.qml</file>
+        <file>icons/send.png</file>
     </qresource>
 </RCC>
