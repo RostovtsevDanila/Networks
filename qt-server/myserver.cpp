@@ -1,13 +1,12 @@
 #include "myserver.h"
 
+#define PORTNUM 1275
 
 MyServer::MyServer()
 {
 	m_socket = new QTcpSocket(this);
 	connect(m_socket, SIGNAL(readyRead()), this, SLOT(sockReady()));
 	connect(m_socket, SIGNAL(disconnected()), this, SLOT(sockDisc()));
-
-	setUserID(0);
 }
 
 MyServer::~MyServer()
@@ -16,14 +15,9 @@ MyServer::~MyServer()
 	delete m_socket;
 }
 
-int MyServer::userID() const
-{
-	return m_userID;
-}
-
 void MyServer::startServer()
 {
-	if(this->listen(QHostAddress::Any, 1275))
+	if(this->listen(QHostAddress::Any, PORTNUM))
 		qDebug() << "Listening in process...";
 	else
 		qDebug() << "Error listening!";
@@ -31,13 +25,11 @@ void MyServer::startServer()
 
 void MyServer::incomingConnection(qintptr socketDescriptor)
 {
-	addPendingConnection(m_socket); //Непонятная муть
+	addPendingConnection(m_socket); //Непонятная муть, хз как это работает
 	m_socket->setSocketDescriptor(socketDescriptor); //Непонятная муть
 
-	m_userID ++;
-
 	qDebug() << "Socket number: " << socketDescriptor << endl
-			 << "Client connected with id:" << userID();
+			 << "Client connected";
 	qDebug() << "Send client connect status 'connected' ";
 
 	m_socket->write("You are connected.");
@@ -45,8 +37,14 @@ void MyServer::incomingConnection(qintptr socketDescriptor)
 
 void MyServer::sockReady()
 {
-	Data = m_socket->readAll();
-	qDebug() << "New message: " << Data;
+	textPartOfMessage = m_socket->readAll();
+	qDebug() << "New message: " << textPartOfMessage;
+	sendMessage(textPartOfMessage);
+
+	if(m_socket->waitForConnected(500)) {
+		m_socket->waitForReadyRead(500);
+		textPartOfMessage = m_socket->readAll();
+	}
 }
 
 void MyServer::sockDisc()
@@ -55,13 +53,7 @@ void MyServer::sockDisc()
 	m_socket->deleteLater();
 }
 
-void MyServer::setUserID(int userID)
+void MyServer::sendMessage(QByteArray msng)
 {
-	if (m_userID == userID)
-		return;
-
-
-	m_userID = userID;
-	emit userIDChanged(m_userID);
+	m_socket->write(msng);
 }
-

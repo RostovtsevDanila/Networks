@@ -6,5 +6,7 @@
         <file>ChatZone.qml</file>
         <file>SendButton.qml</file>
         <file>icons/send.png</file>
+        <file>icons/MessangeItem.qml</file>
+        <file>MessangeItem.qml</file>
     </qresource>
 </RCC>

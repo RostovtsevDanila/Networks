@@ -5,35 +5,28 @@
 #include <QTcpSocket>
 #include <QString>
 #include <QDebug>
+#include <QList>
+
+#include "messange.h"
 
 class MyServer : public QTcpServer
 {
 	Q_OBJECT
 
-	Q_PROPERTY(int userID READ userID WRITE setUserID NOTIFY userIDChanged)
-
 public:
 	MyServer();
 	~MyServer();
-
-	QByteArray Data;
-
-	int userID() const;
 
 public slots:
 	void startServer();
 	void incomingConnection(qintptr socketDescriptor);
 	void sockReady();
 	void sockDisc();
-
-	void setUserID(int userID); //userID ++
-
-signals:
-	void userIDChanged(int userID);
+	void sendMessage(QByteArray msng);//####################################
 
 private:
 	QTcpSocket *m_socket;
-	int m_userID;
+	QByteArray textPartOfMessage;
 };
 
 #endif // MYSERVER_H

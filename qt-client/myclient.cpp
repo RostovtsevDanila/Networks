@@ -6,6 +6,7 @@ MyClient::MyClient(QObject *parent) : QObject(parent)
 
 	connect(m_socket, SIGNAL(readyRead()), this, SLOT(sockReady()));
 	connect(m_socket, SIGNAL(disconnected()), this, SLOT(sockDisc()));
+	connect(this, &MyClient::messangeChanged, &m_chatList, &ChatList::newMessange);
 }
 
 bool MyClient::isConnected() const
@@ -15,11 +16,14 @@ bool MyClient::isConnected() const
 
 void MyClient::sockReady()
 {
+	m_messange = m_socket->readAll();
+	emit messangeChanged(m_messange);
+	qDebug() << "New message: " << m_messange;
+
 	if(m_socket->waitForConnected(500)) {
 		m_socket->waitForReadyRead(500);
-		Data = m_socket->readAll();
+		m_messange = m_socket->readAll();
 		setIsConnected(true);
-		qDebug() << Data;
 	}
 }
 
@@ -30,14 +34,14 @@ void MyClient::sockDisc()
 
 void MyClient::connectToHost()
 {
-	m_socket->connectToHost("127.0.0.1", 1275);
+	m_socket->connectToHost(STANDART_IP, PORTNUM);
 }
 
 void MyClient::sendMessage(QString msg)
 {
-	Data.clear();
-	Data.append(msg);
-	m_socket->write(Data);
+	m_messange.clear();
+	m_messange.append(msg);
+	m_socket->write(m_messange);
 }
 
 void MyClient::setIsConnected(bool isConnected)
@@ -48,3 +52,4 @@ void MyClient::setIsConnected(bool isConnected)
 	m_isConnected = isConnected;
 	emit isConnectedChanged(m_isConnected);
 }
+

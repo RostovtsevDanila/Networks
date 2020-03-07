@@ -19,4 +19,8 @@ Window {
 	MyClient {
 		id: client
 	}
+
+	ChatList {
+		id: chatList
+	}
 }
