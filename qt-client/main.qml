@@ -20,7 +20,7 @@ Window {
 		id: client
 	}
 
-	ChatList {
-		id: chatList
-	}
+    ChatList {
+        id: chatList
+    }
 }
