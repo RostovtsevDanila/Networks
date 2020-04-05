@@ -4,7 +4,7 @@
 
 ChatList::ChatList(QObject *parent) : QAbstractListModel(parent)
 {
-	m_messange = "Here will be messanges.";
+    m_messange = "Here will be messages.";
 	m_data.append(m_messange);
 	updateData();
 }
