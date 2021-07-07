@@ -6,6 +6,7 @@ CONFIG += c++11
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
+        chatlist.cpp \
         main.cpp \
         myclient.cpp
 
@@ -20,4 +21,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+	chatlist.h \
+	message.h \
 	myclient.h
+
+DISTFILES +=
